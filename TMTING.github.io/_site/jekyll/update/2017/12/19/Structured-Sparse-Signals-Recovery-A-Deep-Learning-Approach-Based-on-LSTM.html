@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Structured-Sparse Signals Recovery: A Deep Learning Approach Based on LSTM</title>
+  <meta name="description" content="Structured-Sparse Signals Recovery: A Deep Learning Approach Based on LSTM">
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://localhost:4000/jekyll/update/2017/12/19/Structured-Sparse-Signals-Recovery-A-Deep-Learning-Approach-Based-on-LSTM.html">
+  <link rel="alternate" type="application/rss+xml" title="Your awesome title" href="/feed.xml">
+  
+  
+</head>
+
+
+  <body>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper">
+    
+    
+    <a class="site-title" href="/">Your awesome title</a>
+  
+    
+      <nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger">
+          
+            
+            
+          
+            
+            
+            <a class="page-link" href="/about/">About</a>
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        </div>
+      </nav>
+    
+  </div>
+</header>
+
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Structured-Sparse Signals Recovery: A Deep Learning Approach Based on LSTM</h1>
+    <p class="post-meta">
+      <time datetime="2017-12-19T14:55:24+08:00" itemprop="datePublished">
+        
+        Dec 19, 2017
+      </time>
+      </p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <h2 id="structured-sparse-signals-recovery------------------a-deep-learning-approach-based-on-lstm">Structured-Sparse Signals Recovery:                  A Deep Learning Approach Based on LSTM</h2>
+
+<h3 id="introduction">Introduction</h3>
+
+<p>Compressive sensing nowadays is one of the hottest research topics in signal processing field, which also plays a significant role in signal sampling and recovering.</p>
+
+<p>In the conventional sense, only sparse prior on the property of signals is adopted to guarantee the exact recovery. In the general CS framework, the canonical form of CS could be written as follows:
+<script type="math/tex">\mathbf{y} = \mathbf{Ax} + \mathbf{e}</script></p>
+
+<p>where \(\mathbf{y}\in \mathcal{R}^{M}\) is the measurement matrix, \(\mathbf{A}\in \mathcal{R}^{M\times N}\) is a random sensing matrix with \(M\ll N\) satisfying the so-called <a href="https://www.sciencedirect.com/science/article/pii/S1631073X08000964">RIP</a>, \(\mathbf{x}\in \mathcal{R}^{N}\) is the original sparse signal needed to be recovered with no more than \(K\)\((K&lt;M)\) nonzero elements and \(\mathbf{e}\) is the error term consists of the possible noise and perturbations.</p>
+
+<p>Besides the sparsity, however, the structures which are used to describe the correlation of nonzero elements could also be utilized to improve the performance of sparse signals recovery algorithms, such as block-sparse, tree-structure, uniform-sparse and so forth. There are numerous algorithms have been proposed specific to the certain structure, for instance,  <a href="http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=5437428"> block-CoSaMP </a> and <a href="http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=6415293"> block-sparse Bayesian learning </a> for block-sparse signals, <a href="http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=4907073"> TSW-CS </a> for tree-structure signals, etc.</p>
+
+<p>In spite of aforementioned model-driven methods achieve excellent performance, they still have some insurmountable disadvantages: (1) the highest level that model-driven methods could attain is no more than the comprehension of researchers; (2) model-driven methods are specific to the certain structure and without the universality.</p>
+
+<p>In consideration of the development of deep learning and big data analysis in recent few years, we design a data-driven method which could recover structured-sparse signals with any structure patterns. The main contribution of our work is that we develop a novel algorithm dealing with the problem of structured-sparse signals recovery based on recurrent neural networks. It should be noted especially that our proposed methoed is not only specific to the certain structure but any structure patterns. Extensive experimental results demonstrate the superiority of our proposed algorithm over any other existing model-driven algorithms.</p>
+
+<h3 id="why-and-how-the-lstm-works">Why and How the LSTM works</h3>
+
+<h4 id="why-the-lstm-works">Why the LSTM works</h4>
+
+<p>Along with their great success in natural language processing (NLP), recurrent neural networks (RNNs) have been a significant kind of network in processing the sequential signal. However, the existance of the problem that RNNs are difficult to train and can not handle long-term dependencies over time because of the exploding and vanishing gradient problem that plagues all RNNs in training seriously hindered the development of RNNs in the early phase. The long short-term momery (LSTM), which could recusively maintain the state that is a compact summarization of all the important information from the past for a long period of time, is designed to avoid the long-term dependency problem, allowing larger and deeper networks to be created.</p>
+
+<p>There is an abundance of work attempts to interpret internal mechanisms of the LSTM. Basically, the LSTM can in principal use its memory cells to remember long-range information and keep track of various attributes of information it is currently processing. Let us take a look inside the standard LSTM block below, which is the most general and serves in hidden layers of RNNs in many work. The input gate can allow the input information to alter the memory state or block it. If the new input is relevant for the internal state, the information of the input will be saved in the activation of the memory state. The output gate can allow the memory state to be revealed or prevent its effect on the next neuron. Thus the information stored in the memory state is readable when the output gate is active. The forget gate can update the momery state by erasing or retaining the cell’s previous state. Since the peephole mechanism does not have great help to improve the recovery performance, we have removed these peephole connections to shorten the training time in this work. Aforementioned powerful multiplicative interactions enable the LSTM to capture richer contextual information as it goes along the sequence.</p>
+
+<p><img src="https://github.com/yuanqw/yuanqw.github.io/blob/master/image/lvcc/lstm.png?raw=true" alt="Block diagram of the LSTM" /></p>
+<h3 id="how-the-lstm-works">How the LSTM works</h3>
+
+<p>In this paper, we adopt the framework of the greedy algorithm – <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.55.1254&amp;rep=rep1&amp;type=pdf">OMP</a>. Instead of searching indices of nonzero elements by solving a maximization problem in OMP algorithm, we replace this step with learning approaches. Our proposed algorithm, the flow diagram of which is shown in below, could be split into five steps :</p>
+
+<p><img src="https://github.com/yuanqw/yuanqw.github.io/blob/master/image/lvcc/algorithm.png?raw=true" alt="algorithm" /></p>
+
+<ul>
+  <li>initialize the residual  \(\mathbf{r}\) by the measurement matrix \(\mathbf{y}\) and regard it as the input to the LSTM;</li>
+  <li>consider the output of the LSTM \(\mathbf{s}\) as the input of softmax layer, which is used to calculate the probability of each element of signals be nonzero;</li>
+  <li>select  the maxinum probability in these probabilities and employ its corresponding index as the position of a certain nonzero element;</li>
+  <li>estimate the value of this nonzero element via solving the following least square (LS) problem: 
+<script type="math/tex">\hat{\mathbf{x}} = \arg\min_{\mathbf{x}}|| \mathbf{y}-\mathbf{A}^{\Omega} \mathbf{x}||\_2^2</script></li>
+</ul>
+
+<p>where \(\mathbf{A}^{\Omega}\) is a matrix that includes only those columns of \(\mathbf{A}\) that are members of the support of \(\mathbf{x}\);</p>
+
+<ul>
+  <li>calculate the new residual by using \(\hat{\mathbf{x}}\) in step 4</li>
+</ul>
+
+<script type="math/tex; mode=display">\mathbf{r} = \mathbf{y}-\mathbf{A}^{\Omega} \hat{\mathbf{x}}</script>
+
+<p>this new residual will serve as the input to the LSTM in the next iteration. Of particular note is that the     output of the LSTM will be inputted into the next LSTM as well.</p>
+
+<h2 id="training-details">Training Details</h2>
+
+<h3 id="training-samples-generation">Training Samples Generation</h3>
+
+<p>Now we state concrete steps for generating training samples: (1) randomly give a structured-sparse signal \(\mathbf{x}\) with \(K\) nonzero elements and calculate \(\mathbf{y}\) using <strong>(1)</strong>; (2) find the element that has the maximum value in \(\mathbf{x}\) and set it to zero, then assume that the index of this element is \({p_0}\), thus we get a new structured-sparse signal with \(K-1\) nonzero elements; (3) calculate the residual vector by
+<script type="math/tex">\mathbf{r}=\mathbf{y}-\mathbf{a}_{p\_0}x(p\_0)</script>
+where \(\mathbf{a}_{p_0}\) is the \(p_0\)-th column of the sensing matrix \(\mathbf{A}\) and \(x(p_0)\) is the \(p_0\)-th element of \(\mathbf{x}\). Notably, the generation of the residual vector is because of not having the other \(K-1\) nonzero elements of \(\mathbf{x}\), in which the second largest value in these \(K-1\) nonzero elements principally contributes to the residual vector \(\mathbf{r}\) in <strong>(4)</strong>; (4) assume that the index of the second largest value of \(\mathbf{x}\) is \(p_1\), then define a one-hot vector \(\mathbf{h}\) at \(p_1\)-th entry. Finally, a training sample pair \((\mathbf{r},\mathbf{h})\) is obtained. Next, we set the second largest value of \(\mathbf{x}\) to zero and repeat the above procedures until the vector \(\mathbf{x}\) does not have any nonzero element.</p>
+
+<h3 id="training-regimes">Training Regimes</h3>
+
+<p>The main purpose of training is to find a set of weights and bias values so that computed outputs closely match the known outputs of a collection of training data. The consequent neural network can make predictions on new data once a set of fine weights and bias values have been found.</p>
+
+<p>After employing the cross-entropy as the loss function over the training samples in this work, what we faced is the optimization problem as follows:</p>
+
+<p><script type="math/tex">\mathcal{J}(\Lambda)=\min\_{\Lambda}\left(\sum\_{n=1}^{nB}\sum_{i=1}^{B\text{size}}\sum\_{j=1}^{N}\mathcal{J}\_{n,i,j}(\Lambda)\right)</script>
+<script type="math/tex">\mathcal{J}\_{n,i,j}(\Lambda)=-\mathbf{h}\_{n,i}(j)\log(\mathbf{s}\_{n,i}(j))</script></p>
+
+<p>where \(\mathbf{s}\) is the output of the softmax layer, \(nB\) is the number of structured-sparse signals for generating training samples, \(B\text{size}\) is the number of sample pairs generated from the same given structured-sparse signal, \(N\) is the length of structured-sparse signals and \(\Lambda\) denotes the collection of parameters in the LSTM block.</p>
+
+<p>The whole training procedure is shown in below. Green, red and blue color points are non-zero elements of the given structured-sparse signal, which generate a batch of training pairs \((\mathbf{r}_1, \textbf{h}_1)\), \((\mathbf{r}_2, \textbf{h}_2)\), \(\cdots\), \((\mathbf{r}_s,\textbf{h}_s)\). The residual \(\mathbf{r}\)will serve as an input of the LSTM block, then we obtain an estimated index after the softmax layer. Compare it with groundtruth \(\mathbf{h}\), we acquire the cross-entropy \(\mathbf{J}\). Finally, parameters \(\Lambda\) will be updated via back-propagation algorithm. Please note, again, that the output of the LSTM will be inputted into the next LSTM as well.</p>
+
+<p><img src="https://github.com/yuanqw/yuanqw.github.io/blob/master/image/lvcc/train.jpg?raw=true" alt="train" /></p>
+
+<h2 id="experimental-results-and-analysis">Experimental Results and Analysis</h2>
+
+<p>In this section, three typical structured-sparse signals are selected for our specific experiments, including block-sparse signals, tree-structured signals and uniform-sparse signals. Since there are a lot of algorithms direct at block-sparse signals, we will put our focus on recovery of block-sparse signals while give some comparisons with competitive algorithms on the other two structured-sparse signals. As a matter of convenience, we denote the proposed algorithm SSSR-LSTM, abbreviation of \textit{Structured-Sparse Signals Recovery based on LSTM}. In particular, all the sensing matrice \(\mathbf{A}\) in the following experiments are randomly generated with each entry drawn from standard normal distribution independently, columns of which are  orthonormal. All error terms added to the measurement \(\mathbf{y}\) is additive white Gaussian noise. Otherwise, due to the limited experiment circumstances, the number of given structured-sparse signals for generating training samples and test samples will be set to 5000 and 500, respectively. We have reasons to believe that the performance of our proposed algorithm will be further enhanced along with the increase of training samples. Finally, we introduce Normalized Mean Square Error (NMSE) to evaluate the performance of all algorithms,
+<script type="math/tex">\text{NMSE}=\frac{\|\mathbf{x}-\hat{\mathbf{x}}\|\_F}{\|\mathbf{x}\|\_F}</script></p>
+
+<h3 id="block-sparse-signals">Block-Sparse Signals</h3>
+
+<p>Let us start with block-sparse signals, the nonzero elements of which are occurring in clusters. We examine our proposed algorithm on four aspects, including sparsity, the quantity of blocks, sampling ratio and noise intensity. To generally evaluate the performance of our proposed algorithm, we compare it with some recently developed block-sparse signals recovery algorithms: <a href="http://www.sciencedirect.com/science/article/pii/S0165168411002490">CluSS</a>, <a href="https://www.sciencedirect.com/science/article/pii/S0165168414004411">MBCS-LBP</a>, <a href="http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=6967808">PCSBL</a>, <a href="http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=6415293">EBSBL</a>.</p>
+
+<p>For synthetic data, which is a series of one-dimensional block-sparse signals generated in a similar way to <a href="http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=6415293">EBSBL</a>, we initially set the length of signals \(N=200\), the number of linear measurements \(M=100\), the sparsity of signals \(S=30\) and the quantity of blocks \(T=5\), the standard deviation of noise \(\sigma = 0.05\).</p>
+
+<p><img src="https://github.com/yuanqw/yuanqw.github.io/blob/master/image/lvcc/exp1.png?raw=true" alt="exp1" /></p>
+
+<p>For real-world data, we employ MNIST handwritten digit database, images of which can be regarded as two-dimensional block-sparse signals. Notably, we down-sample these images by ratio 0.5 for faster computational speed, thus the size of all training and test images is 14\(\times\)14 pixels. We set the sampling ratio \(M/N = 0.5\) while add the noise with standard deviation 0.1 to the measurement vector \(\mathbf{y}\) to simulate the error term. The recovery results of respective algorithms are demonstrated in Table1 and Figure 6. It could be visually observed that our proposed algorithm provides the most accurate estimation of original images. In addition, we could obviously find that EBSBL does not perform well on two-dimensional signals as it is on one-dimensional signals while results of other algorithms on two-dimensional signals turn in a consistent performance as they are on one-dimensional signals.</p>
+
+<p><img src="https://github.com/yuanqw/yuanqw.github.io/blob/master/image/lvcc/exp2.png?raw=true" alt="exp2" /></p>
+
+<p><img src="https://github.com/yuanqw/yuanqw.github.io/blob/master/image/lvcc/exp3.png?raw=true" alt="exp3" /></p>
+
+<h3 id="tree-struture-signals">Tree-Struture Signals</h3>
+
+<p>Generally, the wavelet coefficients of an image after a wavelet transform tend to be tree-structured and each wavelet coefficient serves as a parent for four children coefficients. Due to there are few algorithms specific to the tree-struture signals, we compare our proposed algorithm with <a href="http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=4907073">TSW-CS</a>. The standard test image Cameraman is employed for our experiment. We firstly resize the image to 32\(\times\)32 pixels, then the image is decomposed by wavelet transform on Daubechies 1 basis. To simulate the perturbation, we similarly add the noise with standard deviation 0.05 to the measurement vector \(\mathbf{y}\). The sampling ratio we used is 0.5.</p>
+
+<p><img src="https://github.com/yuanqw/yuanqw.github.io/blob/master/image/lvcc/exp4.png?raw=true" alt="exp4" /></p>
+
+<h3 id="uniform-sparse-signals">Uniform-Sparse Signals</h3>
+
+<p>As for uniform-sparse signals, whose interval of two adjacent nonzero elements is uniform. Since we do not seek out any algorithms aimed at this type of structure, we have to compare our proposed algorithm with some classical CS reconstruction algorithms: <a href="https://www.di.ens.fr/~mallat/papiers/MallatPursuit93.pdf">MP</a>, <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.55.1254&amp;rep=rep1&amp;type=pdf">OMP</a>, <a href="http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=4524050">BCS</a>, <a href="https://statweb.stanford.edu/~tibs/lasso/lasso.pdf">LASSO</a>. We set the length of signals is 200, interval of two adjacent nonzero elements is 5. In this subsection, we only compare the performance of aforementioned algorithms versus sampling ratio (\(\sigma = 0.1\)) and noise intensity (\(M/N = 0.5\)).</p>
+
+<p><img src="https://github.com/yuanqw/yuanqw.github.io/blob/master/image/lvcc/exp5.png?raw=true" alt="exp5" /></p>
+
+<h2 id="conclusions">Conclusions</h2>
+
+<p>In this paper, a novel data-driven method based on recurrent neural networks was developed, which could flexibly cope with the structured-sparse signals recovery problem with any structure patterns. Particularly, the long short-term memory was introduced to the proposed algorithm for precisely capturing the correlations and dependencies among nonzero elements of sparse signals. Unlike some other conventional approaches that rely on the certain priori knowledge, SSSR-LSTM is prior-free, which is the reason why our proposed algorithm has the robust ability to explore and exploit intra-structure correlation with any structure patterns. Extensive experiments on three typical structured-sparse signals show that our proposed algorithm achieves a significant performance improvement as compared with the conventional approaches under any experiment settings. It also demonstrates the superiority of our proposed algorithm over other existing state-of-the-art methods.</p>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+
+  
+</article>
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Your awesome title</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>
+            
+              Your awesome title
+            
+            </li>
+            
+            <li><a href="mailto:your-email@example.com">your-email@example.com</a></li>
+            
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/jekyll"><span class="icon icon--github"><svg viewBox="0 0 16 16" width="16px" height="16px"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">jekyll</span></a>
+
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/jekyllrb"><span class="icon icon--twitter"><svg viewBox="0 0 16 16" width="16px" height="16px"><path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
+</span><span class="username">jekyllrb</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>
